@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.coroutines.core)
     implementation(libs.moshi.core)
+    implementation(libs.javax.inject)
 
     testImplementation(libs.bundles.test.base)
 }

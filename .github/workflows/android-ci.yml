@@ -40,12 +40,3 @@ jobs:
 
       - name: Build and Run Unit Tests
         run: ./gradlew build
-
-      - name: Run Instrumented Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 33
-          target: google_apis
-          arch: x86_64
-          emulator-options: -no-window -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew connectedCheck

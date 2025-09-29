@@ -8,6 +8,8 @@ coreKtx = "1.17.0"
 appcompat = "1.7.1"
 lifecycle = "2.9.4"
 activity-compose = "1.11.0"
+androidx-tv-foundation = "1.0.0-alpha11"
+androidx-tv-material = "1.0.0"
 
 # Compose
 compose-compiler = "1.5.15"
@@ -15,6 +17,7 @@ compose-bom = "2025.09.01"
 
 # UI
 material = "1.13.0"
+material3-window-size = "1.4.0"
 
 # Networking
 retrofit = "3.0.0"
@@ -56,8 +59,12 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-material-icons = { module = "androidx.compose.material:material-icons-extended" }
 
+# AndroidX TV
+androidx-tv-foundation = { module = "androidx.tv:tv-foundation", version.ref = "androidx-tv-foundation" }
+androidx-tv-material   = { module = "androidx.tv:tv-material",   version.ref = "androidx-tv-material" }
 # UI
 material = { module = "com.google.android.material:material", version.ref = "material" }
+androidx-compose-material3-window-size = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3-window-size" }
 
 # Networking
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

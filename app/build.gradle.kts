@@ -10,6 +10,8 @@ android {
     namespace = "com.piavillalba.weatherapp"
     compileSdk = 36
 
+    flavorDimensions += "target"
+
     defaultConfig {
         applicationId = "com.piavillalba.weatherapp"
         minSdk = 24
@@ -25,7 +27,29 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    productFlavors {
+        create("googleAndroid") {
+            dimension = "target"
+            applicationIdSuffix = ".googleAndroid"
+            versionNameSuffix = "-g"
+            manifestPlaceholders["appLabel"] = "Weather (Google Android)"
+            manifestPlaceholders["isTv"] = "false"
+            buildConfigField("boolean", "IS_TV", "false")
+        }
+        create("amazonTv") {
+            dimension = "target"
+            applicationIdSuffix = ".amazonTv"
+            versionNameSuffix = "-aftv"
+            manifestPlaceholders["appLabel"] = "Weather (Fire TV)"
+            manifestPlaceholders["isTv"] = "true"
+            buildConfigField("boolean", "IS_TV", "true")
+        }
+    }
+
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://api.weather.gov/\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -62,6 +86,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
+    implementation(libs.androidx.compose.material3.window.size)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
@@ -77,4 +102,8 @@ dependencies {
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+
+    // Flavor-specific dependencies
+    "amazonTvImplementation"(libs.androidx.tv.foundation)
+    "amazonTvImplementation"(libs.androidx.tv.material)
 }

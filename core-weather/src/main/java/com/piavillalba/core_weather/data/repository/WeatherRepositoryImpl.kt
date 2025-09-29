@@ -1,5 +1,6 @@
 package com.piavillalba.core_weather.data.repository
 
+import com.piavillalba.core_weather.data.mapper.toDomainModel
 import com.piavillalba.core_weather.data.remote.WeatherApi
 import com.piavillalba.core_weather.domain.model.Weather
 import com.piavillalba.core_weather.domain.model.WeatherError

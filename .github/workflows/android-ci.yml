@@ -34,8 +34,8 @@ jobs:
         with:
           cache-read-only: false
 
-      - name: Run Ktlint
-        run: ./gradlew ktlintCheck
+      - name: Run lint
+        run: ./gradlew lint
 
 
       - name: Build and Run Unit Tests

@@ -9,7 +9,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -65,10 +65,8 @@ class WeatherRepositoryImplTest {
         val lat = 37.0
         val lon = -121.0
         val pointsDto = PointsDto("forecast_url")
-        val errorBody = ResponseBody.create(
-            "application/json".toMediaType(),
-            """{"error":"server"}"""
-        )
+        val errorBody = """{"error":"server"}"""
+            .toResponseBody("application/json".toMediaType())
         val httpException = HttpException(Response.error<Any>(500, errorBody))
 
         coEvery { api.getPoints(lat, lon) } returns pointsDto

@@ -6,9 +6,15 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout
@@ -20,14 +26,26 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
+        with:
+          cache-read-only: false
 
-      - name: Run Lint
-        run: ./gradlew lint
+      - name: Run Ktlint
+        run: ./gradlew ktlintCheck
 
-      - name: Run Unit Tests
-        run: ./gradlew test
+
+      - name: Build and Run Unit Tests
+        run: ./gradlew build
 
       - name: Run Instrumented Tests
-        run: ./gradlew connectedCheck
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: google_apis
+          arch: x86_64
+          emulator-options: -no-window -noaudio -no-boot-anim -camera-back none
+          script: ./gradlew connectedCheck

@@ -1,24 +1,39 @@
 ## Description
-<!-- Provide a clear description of the changes introduced in this PR -->
+<!-- Provide a clear, concise description of the changes introduced in this PR. -->
 
+## Type of Change
+<!-- Please check the relevant option. -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Refactor (non-breaking change that neither fixes a bug nor adds a feature)
+- [ ] Chore (e.g., updating dependencies, CI/CD)
 
 ## Implementation Notes
-- [ ] Added/updated modules
-- [ ] Applied SOLID & clean architecture principles
-- [ ] Added/updated unit tests
-- [ ] Updated UI widgets if needed
+| Task | Done |
+| --- | --- |
+| Modules updated/added | ☐ |
+| SOLID & Clean Architecture principles applied | ☐ |
+| Unit tests added/updated | ☐ |
+| Instrumented tests added/updated | ☐ |
+| UI widgets updated (if applicable) | ☐ |
 
 ## How to Test
-1. Run `./gradlew clean build`
-2. Run `./gradlew lint`
-3. Run tests locally with `./gradlew test`
+<!-- Please provide specific, step-by-step instructions on how to test these changes. -->
+1. Check out this branch.
+2. Run `./gradlew clean build` to ensure the project builds successfully.
+3. Run all tests with `./gradlew test connectedCheck`.
+4. **Verify that...** <!-- Add a specific verification step, e.g., "the new UI component renders correctly." -->
 
 ## Screenshots / UI Previews
-<!-- Add screenshots or previews if this PR includes UI changes -->
+<!-- Add screenshots, GIFs, or videos if this PR includes UI changes. -->
+
+## Related PRs
+<!-- Link to any related or dependent PRs. -->
 
 ## Checklist
-- [ ] My code builds locally without errors
-- [ ] Lint/formatting checks pass
-- [ ] Unit tests pass
-- [ ] No hardcoded strings or magic numbers
-- [ ] Documentation updated (if applicable)
+- [ ] My code builds locally without errors.
+- [ ] All new and existing tests pass.
+- [ ] I have added/updated KDoc for all new/changed public APIs.
+- [ ] No hardcoded strings or magic numbers.
+- [ ] The CI pipeline passes.

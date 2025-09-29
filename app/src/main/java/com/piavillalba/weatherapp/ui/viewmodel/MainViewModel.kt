@@ -39,18 +39,9 @@ class MainViewModel @Inject constructor(
                     _uiState.value = MainUiState.Success(result.value)
                 }
                 is WeatherResult.Failure -> {
-                    _uiState.value = MainUiState.Error(mapErrorToMessage(result.error))
+                    _uiState.value = MainUiState.Error(result.error)
                 }
             }
-        }
-    }
-
-    private fun mapErrorToMessage(error: WeatherError): String {
-        return when (error) {
-            is WeatherError.Network -> "Network error. Please check your connection."
-            is WeatherError.Http -> "Error fetching data: ${error.code} ${error.msg}"
-            is WeatherError.EmptyForecast -> "Could not find forecast data for the selected location."
-            is WeatherError.Unexpected -> "An unexpected error occurred. Please try again."
         }
     }
 }

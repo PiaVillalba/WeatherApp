@@ -5,4 +5,10 @@
     <string name="location_name">San Jose, CA Area</string>
     <string name="temperature_display_format">%1$d° F / %2$d° C</string>
     <string name="fetching_weather">Fetching weather…</string>
+
+    <!-- Error Messages -->
+    <string name="error_network">Network error. Please check your connection and try again.</string>
+    <string name="error_http">We couldn\'t reach the server. Please try again later. (Error: %1$d)</string>
+    <string name="error_empty_forecast">Could not find forecast data for the selected location.</string>
+    <string name="error_unexpected">An unexpected error occurred. Please try again.</string>
 </resources>

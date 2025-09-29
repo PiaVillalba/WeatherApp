@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.piavillalba.core_weather.domain.model.WeatherError
 import com.piavillalba.ui_weather.widgets.ErrorCard
 import com.piavillalba.ui_weather.widgets.ErrorContent
 import com.piavillalba.ui_weather.widgets.LoadingWidget
@@ -13,7 +14,7 @@ import com.piavillalba.ui_weather.widgets.TemperatureWidget
 import com.piavillalba.weatherapp.R
 import com.piavillalba.weatherapp.ui.viewmodel.MainUiState
 import com.piavillalba.weatherapp.ui.viewmodel.MainViewModel
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 
@@ -29,6 +30,7 @@ fun WeatherScreen( viewModel: MainViewModel = hiltViewModel()) {
             is MainUiState.Loading -> {
                 LoadingWidget(loadingText = stringResource(R.string.fetching_weather))
             }
+
             is MainUiState.Success -> {
                 val temperatureF = state.weather.temperatureF
                 val temperatureC = state.weather.temperatureC
@@ -41,8 +43,14 @@ fun WeatherScreen( viewModel: MainViewModel = hiltViewModel()) {
                     )
                 )
             }
+
             is MainUiState.Error -> {
-                val errorMessage = state.message
+                val errorMessage = when (val error = state.error) {
+                    is WeatherError.Http -> stringResource(id = R.string.error_http, error.code)
+                    WeatherError.Network -> stringResource(id = R.string.error_network)
+                    WeatherError.EmptyForecast -> stringResource(id = R.string.error_empty_forecast)
+                    is WeatherError.Unexpected -> stringResource(id = R.string.error_unexpected)
+                }
                 ErrorCard {
                     ErrorContent(
                         title = "Upss",
@@ -50,6 +58,8 @@ fun WeatherScreen( viewModel: MainViewModel = hiltViewModel()) {
                         retryText = "Retry",
                         onRetry = viewModel::retryCurrentWeather
                     )
+
+
                 }
             }
         }

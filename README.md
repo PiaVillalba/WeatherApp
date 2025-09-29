@@ -17,6 +17,7 @@ This app fetches the current weather for a predefined location and displays it. 
 - [🧪 Testing](#-testing)
 - [📸 Screenshots](#-screenshots)
 - [🎥 Demo Video](#-demo-video)
+- [⚙️ Development Workflow & CI/CD](#️-development-workflow--cicd)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 
@@ -47,6 +48,14 @@ Is organized into **three modules** for clear separation of concerns:
 +-----------------+      +------------------+      +----------------+
 ```
 
+| Module         | Layer(s)          | Responsibility                                                                                             | Key Characteristics                               |
+|----------------|-------------------|------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
+| **`app`**      | Presentation      | Orchestrates the UI, manages state (`ViewModel`), and defines product flavors. Integrates all other modules. | Android Application, depends on all other modules |
+| **`ui-weather`** | Presentation (UI) | A "Design System" of reusable, data-agnostic Jetpack Compose widgets (`TemperatureWidget`, etc.).         | Android Library, depends on `core-weather`        |
+| **`core-weather`** | Domain & Data     | Contains all business logic, data models, and data-fetching implementations.                               | Pure Kotlin Library, no Android dependencies      |
+
+---
+
 ### Module Breakdown
 
 #### 📦 `app`
@@ -56,11 +65,49 @@ This is the main application module and acts as the **Presentation Layer**. It i
 *   **Dependency Injection**: Sets up the Hilt modules for the entire application.
 *   **Product Flavors**: Defines the `googleAndroid` and `amazonTv` build variants, each with its own `AndroidManifest.xml` to configure device capabilities.
 
+  📊 **UI State Flow**
+
+```mermaid
+sequenceDiagram
+    MainActivity->>WeatherScreen: recompose()
+    WeatherScreen->>MainViewModel: collectAsState()
+    MainViewModel->>GetCurrentWeatherUseCase: execute()
+    GetCurrentWeatherUseCase-->>MainViewModel: WeatherResult
+    MainViewModel->>MainUiState: Update StateFlow
+    WeatherScreen-->>MainActivity: Recomposes with new state
+```
+
+
 #### 📦 `core-weather`
 This is a pure Kotlin module, independent of Android, representing the **Domain and Data layers**.
 *   **Domain**: Contains the business models (`Weather`), the repository interface (`WeatherRepository`), and the use cases (`GetCurrentWeatherUseCase`) that encapsulate business logic.
 *   **Data**: Includes the repository implementation (`WeatherRepositoryImpl`), data sources (`WeatherApi`), DTOs (`PointsDto`, `ForecastDto`), and mappers to convert DTOs into domain models.
 *   **Network**: Defines the Retrofit interface (`WeatherApi`) for communicating with the weather API.
+
+This is the application's core. Its independence from Android makes it highly portable and easy to test.
+
+📊 **Core Flow**
+
+```mermaid
+sequenceDiagram
+    participant VM as ViewModel (in app)
+    participant UC as GetCurrentWeatherUseCase
+    participant Repo as WeatherRepository
+    participant DS as WeatherRemoteDataSource
+    participant API as WeatherApi (Retrofit)
+
+    VM->>UC: execute(lat, lon)
+    UC->>Repo: getCurrentWeather(lat, lon)
+    Repo->>DS: getForecast(lat, lon)
+    DS->>API: getPoints(lat, lon)
+    API-->>DS: PointsDto
+    DS->>API: getForecast(forecastUrl)
+    API-->>DS: ForecastDto
+    DS-->>Repo: ForecastDto
+    Repo->>Repo: map(dto) -> Weather
+    Repo-->>UC: WeatherResult.Success(Weather)
+    UC-->>VM: WeatherResult.Success(Weather)
+```
 
 #### 📦 `ui-weather`
 This is an Android library module focused exclusively on **reusable Jetpack Compose components**.
@@ -141,6 +188,52 @@ The project is modularized to simplify testing at different layers:
 
 ## 🎥 Demo Video
 [mobile.webm](https://github.com/user-attachments/assets/57d491c4-968b-4b03-8b1b-705f59deee53)
+
+## Development Workflow & CI/CD
+
+A professional-grade workflow was simulated to ensure code quality and stability.
+
+### ⚙️ Git Workflow: Trunk-Based Development
+
+```mermaid
+graph TD
+    subgraph "main (Trunk)"
+        A(v1.0) --> B(v1.1) --> C(v1.2)
+    end
+
+    subgraph "Feature Branches"
+        D[feat/add-loading-state] --> B
+        E[fix/update-readme] --> C
+        F[feat/adaptive-ui] --> C
+    end
+
+    style B fill:#9f9,stroke:#333,stroke-width:2px
+    style C fill:#9f9,stroke:#333,stroke-width:2px
+```
+
+1.  **`main` is the source of truth.** It is always stable and releasable.
+2.  All new work happens on short-lived **feature branches**.
+3.  Work is merged into `main` via **Pull Requests (PRs)**, which require code review and passing CI checks.
+
+## ⚙️ Continuous Integration (CI) with GitHub Actions
+
+The `.github/workflows/android-ci.yml` file defines an automated pipeline that runs on every Pull Request.
+
+```mermaid
+graph TD
+    A[Push to PR] --> B{Run CI Workflow};
+    B --> C[Lint Check];
+    B --> D[Unit Tests];
+    B --> E[Build All Flavors];
+    C --> F{All Checks Pass?};
+    D --> F;
+    E --> F;
+    F -- Yes --> G[✅ PR is Mergeable];
+    F -- No --> H[❌ PR is Blocked];
+```
+
+This automated process guarantees that no code that breaks the build, fails tests, or violates style guidelines can be merged into the main branch.
+
 
 ## 🤝 Contributing
 Contributions, issues, and feature requests are welcome!  

@@ -9,26 +9,20 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-internal class WeatherRepositoryImpl @Inject constructor(
-    private val api: WeatherApi
+class WeatherRepositoryImpl @Inject constructor(
+    private val api: WeatherApi,
 ) : WeatherRepository {
     override suspend fun getCurrentWeather(lat: Double, lon: Double): WeatherResult<Weather> {
         return try {
             val points = api.getPoints(lat, lon)
-            val forecast = api.getForecast(points.properties.forecast)
-            val currentForecast = forecast.properties.periods.firstOrNull()
-                ?: return WeatherResult.Failure(WeatherError.EmptyForecast)
-            WeatherResult.Success(
-            Weather(
-                temperature = currentForecast.temperature,
-                temperatureUnit = currentForecast.temperatureUnit
-            ))
+            val forecast = api.getForecast(points.forecast)
+            val currentForecast = forecast.periods.firstOrNull() ?: return WeatherResult.Failure(WeatherError.EmptyForecast)
+            WeatherResult.Success(currentForecast.toDomainModel())
         } catch (io: IOException) {
             WeatherResult.Failure(WeatherError.Network)
-        }catch (he: HttpException) {
+        } catch (he: HttpException) {
             WeatherResult.Failure(WeatherError.Http(he.code(), he.message()))
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             WeatherResult.Failure(WeatherError.Unexpected(e))
         }
     }

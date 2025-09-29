@@ -9,11 +9,10 @@ kotlin {
 dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)
-    implementation(libs.okhttp.core)
     implementation(libs.okhttp.logging)
     implementation(libs.coroutines.core)
-    implementation(libs.moshi.core)
+    implementation(libs.moshi.kotlin)
     implementation(libs.javax.inject)
 
-    testImplementation(libs.bundles.test.base)
+    testImplementation(libs.bundles.unitTest)
 }

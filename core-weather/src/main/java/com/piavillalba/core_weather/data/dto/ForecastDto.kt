@@ -4,13 +4,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ForecastDto(
-    val properties: Properties
+    val periods: List<Period>
 ) {
-    @JsonClass(generateAdapter = true)
-    data class Properties(
-        val periods: List<Period>
-    )
-
     @JsonClass(generateAdapter = true)
     data class Period(
         val temperature: Int,

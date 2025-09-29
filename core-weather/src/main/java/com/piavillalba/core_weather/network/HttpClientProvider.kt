@@ -14,7 +14,7 @@ private const val DEFAULT_TIMEOUT_SECONDS = 10L
 class HttpClientProvider(
     private val userAgent: String = DEFAULT_UA,
     private val cacheDir: File? = null,
-    private val logLevel: HttpLoggingInterceptor.Level = HttpLoggingInterceptor.Level.BASIC,
+    private val logLevel: HttpLoggingInterceptor.Level = HttpLoggingInterceptor.Level.BODY,
 ) {
     private val userAgentInterceptor = Interceptor { chain ->
         chain.proceed(

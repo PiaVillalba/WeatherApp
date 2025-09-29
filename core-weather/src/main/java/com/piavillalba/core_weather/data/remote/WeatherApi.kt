@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Url
 
-internal interface WeatherApi {
+interface WeatherApi {
     @GET("points/{lat},{lon}")
     suspend fun getPoints(
         @Path("lat") lat: Double,

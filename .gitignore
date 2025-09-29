@@ -1,0 +1,49 @@
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- IDE ----
+*.iml
+.idea/
+!/.idea/codeStyles
+!/.idea/inspectionProfiles
+!/.idea/runConfigurations
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+
+# ---- Gradle ----
+.gradle/
+**/build/
+out/
+
+# ---- Android/NDK ----
+/local.properties
+local.properties
+.externalNativeBuild/
+.cxx/
+captures/
+.navigation/
+*.hprof
+
+# ---- Kotlin/Annotation processing ----
+.ksp/
+.kapt/
+
+# ---- Logs / reports ----
+*.log
+*.ec
+coverage/
+reports/
+
+# ---- Firmas / secretos ----
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+gradle-local.properties
+*.env
+*.env.*

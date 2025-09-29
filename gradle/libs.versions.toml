@@ -39,7 +39,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm",     version.ref = "kotlin" }
 ########### Bundles (opcionales) ###########
 [bundles]
 networking = ["retrofit", "retrofit-moshi", "okhttp-core", "okhttp-logging", "moshi-core"]

@@ -1,17 +1,45 @@
+[![CI](https://github.com/your-username/WeatherApp/actions/workflows/android-ci.yml/badge.svg)](https://github.com/your-username/WeatherApp/actions/workflows/android-ci.yml)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.0-blue.svg?logo=kotlin)](https://kotlinlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+
 # WeatherApp 🌦️
 
-A modern and simple Android application, built to demonstrate a robust, scalable, and maintainable architecture. This app fetches the current weather for a predefined location and displays it in a clean, adaptive UI.
+A modern and simple Android application, built to demonstrate a robust, scalable, and maintainable architecture.
+This app fetches the current weather for a predefined location and displays it. It also demonstrates integration of weather APIs, adaptive UI for different devices, and product flavors for **Google Android** and **Amazon FireTV**.
+
+## 📚 Table of Contents
+- [✨ Features](#-features)
+- [🏛️ Architecture](#-architecture)
+- [🌐 Product Flavors](#-product-flavors)
+- [🛠️ Tech Stack](#-tech-stack)
+- [🚀 Getting Started](#-getting-started)
+- [🧪 Testing](#-testing)
+- [📸 Screenshots](#-screenshots)
+- [🎥 Demo Video](#-demo-video)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+
 
 ## ✨ Features
 
-*   **Weather Data Fetching**: Fetches and displays the current temperature for San Jose, CA.
-*   **State Handling**: Gracefully manages loading and error states.
-*   **Adaptive UI**: The user interface seamlessly adapts to different screen sizes and orientations, providing an optimal experience on phones, tablets, and TV devices.
-*   **Product Flavors**: Supports different build variants for standard Android (`googleAndroid`) and Amazon Fire TV (`amazonTv`).
+- 🌍 **Weather Data Fetching** → Retrieves and displays current weather conditions.
+- 🔄 **State Handling** → Manages loading, error, and success states gracefully.
+- 📱 **Adaptive UI** → Optimized for different screen sizes (phone, tablet, TV) and orientations (portrait/landscape).
+- 🖥 **Product Flavors** → Supports build variants for `googleAndroid` and `amazonTv`.
+- 🧩 **Modularization** → Clear separation of concerns with independent modules.
+- ✅ **Testing Support** → Unit tests for domain/data logic and UI tests for Compose widgets.
 
 ## 🏛️ Architecture
 
 This project follows the principles of **Clean Architecture** and is structured into multiple modules to promote separation of concerns, scalability, and independent development.
+
+Is organized into **three modules** for clear separation of concerns:
+
+- **`app/`** → Main application module. Handles navigation, flavors, and app entry points.
+- **`core-weather/`** → Core business logic, networking, repositories, and models for weather data.
+- **`ui-weather/`** → Reusable UI components and widgets (Compose) such as `TemperatureWidget`, `LoadingWidget`, and error screens.
+
 
 ```
 +-----------------+      +------------------+      +----------------+
@@ -41,6 +69,23 @@ This is an Android library module focused exclusively on **reusable Jetpack Comp
 *   **Adaptability**: The `TemperatureWidget` is adaptive itself, changing its internal layout from a `Column` to a `Row` based on the available screen space.
 *   **Extensions**: Provides UI extension functions, such as the `glass` effect for backgrounds.
 
+## 🌐 Product Flavors
+
+Defined in `app/build.gradle.kts`:
+
+- **Google Android** → For phones and tablets.
+- **Amazon FireTV** → TV-ready with launcher intent filter.
+
+Build commands:
+
+```bash
+# Google Android (phone/tablet)
+./gradlew installGoogleAndroidDebug
+
+# Amazon FireTV
+./gradlew installAmazonTvDebug
+```
+
 ## 🛠️ Tech Stack
 
 *   **Language**: [Kotlin](https://kotlinlang.org/)
@@ -58,11 +103,45 @@ This is an Android library module focused exclusively on **reusable Jetpack Comp
     ```
 2.  **Open the project** in Android Studio.
 3.  **Build and run**: Select one of the build variants (`googleAndroidDebug` or `amazonTvDebug`) and a compatible device (emulator or physical).
-
+4.  **Run the app**: with:
+    ```bash
+    ./gradlew installGoogleAndroidDebug
+    # or
+    ./gradlew installAmazonTvDebug
+    ```
 ## 🧪 Testing
 
-The modular architecture of this project makes unit and instrumentation testing straightforward.
+The project is modularized to simplify testing at different layers:
 
-*   **`core-weather`**: Unit tests can be added using JUnit and MockK/Mockito for `UseCases`, `Repositories`, and `Mappers` without needing an Android emulator.
-*   **`ui-weather`**: Screenshot testing and UI tests can be added for the Compose widgets in isolation.
-*   **`app`**: Instrumentation tests can be added for the `ViewModel` and end-to-end UI tests.
+- **`core-weather` (Unit Tests)**
+    - Tests for use cases, repositories, and mappers.
+    - Runs with **JUnit** + **MockK/Mockito**.
+    - Does not require an Android emulator.
+
+- **`ui-weather` (UI Tests)**
+    - Compose UI tests for widgets like `TemperatureWidget`, `ErrorCard`, and `LoadingWidget`.
+    - Supports screenshot testing and interaction validation.
+
+- **`app` (Instrumentation Tests)**
+    - End-to-end UI tests for `MainActivity` and `WeatherScreen`.
+    - Verifies orientation changes, adaptive layouts, and state handling.
+
+### Run all tests
+```bash
+./gradlew test connectedCheck
+```
+
+## 📸 Screenshots
+
+| Phone | Tablet | TV |
+|-------|--------|----|
+| <img src="https://github.com/user-attachments/assets/a0e9b3f4-a0a0-4dfc-b750-528e6b40aad2" width="250" /> | <img src="https://github.com/user-attachments/assets/02422687-944e-43cc-868a-2c640d4f0e7d" width="400" /> | <img src="https://github.com/user-attachments/assets/2b97df87-23ad-4566-93e7-2a876a4326fe" width="400" /> |
+
+## 🎥 Demo Video
+
+https://github.com/user-attachments/assets/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!  
+Feel free to open a [discussion](../../discussions) or a [pull request](../../pulls).
+

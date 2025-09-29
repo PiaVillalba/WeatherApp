@@ -2,10 +2,14 @@ package com.piavillalba.weatherapp.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.piavillalba.core_weather.domain.model.WeatherError
 import com.piavillalba.ui_weather.widgets.ErrorCard
 import com.piavillalba.ui_weather.widgets.ErrorContent
@@ -14,36 +18,34 @@ import com.piavillalba.ui_weather.widgets.TemperatureWidget
 import com.piavillalba.weatherapp.R
 import com.piavillalba.weatherapp.ui.viewmodel.MainUiState
 import com.piavillalba.weatherapp.ui.viewmodel.MainViewModel
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.compose.runtime.getValue
 
 @Composable
-fun WeatherScreen( viewModel: MainViewModel = hiltViewModel()) {
+fun WeatherScreen(
+    windowSizeClass: WindowWidthSizeClass,
+    viewModel: MainViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
         when (val state = uiState) {
             is MainUiState.Loading -> {
                 LoadingWidget(loadingText = stringResource(R.string.fetching_weather))
             }
-
             is MainUiState.Success -> {
-                val temperatureF = state.weather.temperatureF
-                val temperatureC = state.weather.temperatureC
+                val weather = state.weather
                 TemperatureWidget(
                     location = stringResource(id = R.string.location_name),
                     temperatureDisplay = stringResource(
                         id = R.string.temperature_display_format,
-                        temperatureF,
-                        temperatureC
-                    )
+                        weather.temperatureF,
+                        weather.temperatureC
+                    ),
+                    windowSizeClass = windowSizeClass
                 )
             }
-
             is MainUiState.Error -> {
                 val errorMessage = when (val error = state.error) {
                     is WeatherError.Http -> stringResource(id = R.string.error_http, error.code)
@@ -61,6 +63,7 @@ fun WeatherScreen( viewModel: MainViewModel = hiltViewModel()) {
 
 
                 }
+
             }
         }
     }
